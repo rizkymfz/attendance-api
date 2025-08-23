@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User } from "../models/User.js";
 import { errorResponse, successResponse } from "../utils/response.js";
+import { publishToChannel } from "../services/rabbit.js";
 
 export const updateProfile = async (req: Request, res: Response) => {
     try {
@@ -18,6 +19,18 @@ export const updateProfile = async (req: Request, res: Response) => {
         }
     
         await user.save();
+
+        // logger
+        const logData = {
+            user_id: user.id,
+            action: "UPDATE_PROFILE",
+            created_at: new Date(),
+            details: {
+                phone,
+                photo: user.photo,
+            },
+        };
+        publishToChannel("user_logs", logData);
 
         const userData = user.toJSON();
         delete userData.password;

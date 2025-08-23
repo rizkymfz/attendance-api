@@ -7,6 +7,7 @@ import { router as attendanceRouter } from "./routes/attendance.route.js";
 import { router as adminRouter } from "./routes/admin.route.js";
 import cors from 'cors';
 import path from "path";
+import { connectRabbit } from "./services/rabbit.js";
 
 dotenv.config();
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/v1", baseApi);
 
 // Server
 const PORT = process.env.PORT || 3000;
-sequelize.sync().then(() => {
+sequelize.sync().then(async () => {
+  await connectRabbit();
   app.listen(PORT, () => console.log(`Server running in: http://localhost:${PORT}`));
 });

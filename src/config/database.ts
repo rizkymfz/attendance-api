@@ -13,3 +13,14 @@ export const sequelize = new Sequelize(
         logging: false,
     }
 );
+
+export const logDB = new Sequelize(
+  process.env.LOG_DB_NAME!,
+  process.env.LOG_DB_USER!,
+  process.env.LOG_DB_PASS!,
+  {
+    host: process.env.LOG_DB_HOST || "localhost",
+    dialect: "mysql",
+    logging: false,
+  }
+);
