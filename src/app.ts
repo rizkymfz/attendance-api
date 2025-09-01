@@ -1,3 +1,4 @@
+process.env.TZ = 'Asia/Jakarta';
 import express, { Router } from "express";
 import dotenv from "dotenv";
 import { sequelize } from "./config/database.js";
